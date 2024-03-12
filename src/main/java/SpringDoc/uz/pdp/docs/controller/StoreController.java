@@ -23,6 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 @OpenAPIDefinition(
@@ -62,12 +65,16 @@ import java.util.List;
         bearerFormat = "JWT",
         scheme = "bearer"
 )
+
 @RequestMapping("/api/stores")
 public class StoreController {
+    private final Logger logger;
     private final StoreServiceImp service;
 
     public StoreController(StoreServiceImp service) {
         this.service = service;
+        this.logger=Logger.getLogger(StoreController.class.getName());
+        logger.setLevel(Level.INFO);
     }
 
     @PostMapping
@@ -89,6 +96,7 @@ public class StoreController {
     @Operation(summary = "gets store by its id")
     @GetMapping("/{id}")
     public ResponseEntity<Store> get(@PathVariable Long id) {
+        logger.log(Level.INFO,"requested the store ");
         return ResponseEntity.ok(service.getById(id).getBody());
     }
 
